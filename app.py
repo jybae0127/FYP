@@ -69,8 +69,8 @@ def callback():
   // Send message back to opener (your React app)
   if (window.opener) {
     window.opener.postMessage(
-      { status: "success", authenticated: true },
-      "http://localhost:3000"
+    { status: "success", authenticated: true },
+    "*"
     );
   }
   // Close the popup window
