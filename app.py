@@ -75,7 +75,7 @@ def query():
     creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
     service = build('gmail', 'v1', credentials=creds)
 
-    resp = service.users().messages().list(userId='me', q=q, maxResults=20).execute()
+    resp = service.users().messages().list(userId='me', q=q, maxResults=50).execute()
     messages = resp.get('messages', [])
     results = []
 
