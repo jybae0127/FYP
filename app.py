@@ -59,15 +59,31 @@ def callback():
     flow.fetch_token(authorization_response=request.url)
     creds = flow.credentials
 
+    # Save token on Render filesystem
     with open(TOKEN_FILE, 'w') as token:
         token.write(creds.to_json())
 
-    return '<p>✅ Login success! Go to /query?q=your_query</p>'
+    # 🔁 Tell the frontend "login success" and close popup
+    return """
+<script>
+  // Send message back to opener (your React app)
+  if (window.opener) {
+    window.opener.postMessage(
+      { status: "success", authenticated: true },
+      "http://localhost:3000"
+    );
+  }
+  // Close the popup window
+  window.close();
+</script>
+"""
 
 
 @app.route('/query')
 def query():
-    q = request.args.get('q', 'in:inbox after:2024/01/01')
+    # ❌ Old: 'in:inbox after:2024/01/01'
+    # ✅ New: no date filter by default
+    q = request.args.get('q', 'in:inbox')
 
     if not os.path.exists(TOKEN_FILE):
         return redirect('/')
