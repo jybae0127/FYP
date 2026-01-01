@@ -315,8 +315,8 @@ def index():
         return '<p>Already authenticated! Use /query?q=... or /process</p>'
 
     flow = Flow.from_client_config(CLIENT_CONFIG, scopes=SCOPES, redirect_uri=REDIRECT_URI)
-    auth_url, _ = flow.authorization_url(prompt='consent')
-    return f'<a href="{auth_url}">Login with Google</a>'
+    auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
+    return redirect(auth_url)
 
 
 @app.route('/callback')
